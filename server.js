@@ -40,7 +40,6 @@ io.on('connection', function(socket){
 	
 	// user enters room
 	socket.on("enter room", function(data) {
-		console.log("enter room", data);
 		var myUserType, myUserId, myTurtleId;
 		socket.leave("login");
 		if (data.room === "admin") {
@@ -48,7 +47,7 @@ io.on('connection', function(socket){
 		} else {
 			// if user is first to enter a room, and only one room exists, then enable the timer
 			if (Object.keys(roomData).length === 0) { 
-				// if teacher and student have different interfaces
+				// if teacher and student have different interfaces (hubnet, not gbcc)
 				if (config.interfaceJs.teacherComponents.componentRange != config.interfaceJs.teacherComponents.componentRange) {
 					enableTimer(); 
 				}
@@ -159,7 +158,6 @@ io.on('connection', function(socket){
 		var myRoom = socket.myRoom;
 		var myUserId = socket.id;
 		var destination = data.hubnetMessageSource;
-		console.log("hubnet send " + data.hubnetMessageTag + " to " + destination);
 		if (destination === "server") {
 			roomData[myRoom].userData[myUserId][data.hubnetMessageTag] = data.hubnetMessage;
 		} else {
@@ -173,6 +171,7 @@ io.on('connection', function(socket){
 		 	if (destination === "all-users"){
 				socket.to(myRoom+"-teacher").emit("display reporter", dataObject);
 				socket.to(myRoom+"-student").emit("display reporter", dataObject);
+				socket.emit("display reporter", dataObject);
 			} else {
 				io.to(destination).emit("display reporter", dataObject);
 			}
@@ -181,35 +180,51 @@ io.on('connection', function(socket){
 	
 	// pass reporter from student to server
 	socket.on("get reporter", function(data) {
-		if (socket.myRoom) {
-			var myRoom = socket.myRoom;
-			if (data.hubnetMessageSource === "all users") {
-				for (var key in roomData[myRoom].myData) {
-					socket.emit("display reporter", {
-						hubnetMessageSource: data.bubnetMessageSource,
-						hubnetMessageTag: data.hubnetMessageTag,
-						hubnetMessage: roomData[myRoom].myData[key][data.hubnetMessageTag],
-						components: ""
+		var myRoom = socket.myRoom;
+		socket.messageQueue = [];
+		var i=0;
+		if (data.hubnetMessageSource === "all users") {
+			for (var key in roomData[myRoom].userData) {
+				if (roomData[myRoom].userData[key][data.hubnetMessageTag]) {
+					socket.messageQueue.push({
+						key: key,
+						tag: data.hubnetMessageTag,
+						room: myRoom
 					});
 				}
-			} else {
+				i++;
+				if (i === Object.keys(roomData[myRoom].userData).length) 
+				{ processMessage(socket.messageQueue); }	
+			}
+		} else {
+			if (roomData[myRoom].userData[data.hubnetMessageSource]) {
 				socket.emit("display reporter", {
-					hubnetMessageSource: data.bubnetMessageSource,
+					hubnetMessageSource: data.hubnetMessageSource,
 					hubnetMessageTag: data.hubnetMessageTag,
-					hubnetMessage: roomData[myRoom].myData[data.hubnetMessageSource][data.hubnetMessageTag],
-					components: ""
+					hubnetMessage: roomData[myRoom].userData[data.hubnetMessageSource][data.hubnetMessageTag],
+					components: config.clientJs.reporterComponents,
 				});
 			}
 		}
 	});
 	
-	// if teacher leaves room, disconnect all students from room
-	socket.on("clear room", function(data) {
-		var myRoom = data.roomName;
-		if (roomData[myRoom]) {
-			socket.to(myRoom+"-teacher").emit("display interface", {userType: "disconnected"});
-			io.sockets.sockets[roomData[myRoom].userIdDict["teacher"]].disconnect();			
+	function processMessage(messageQueue) {
+		var messageObj = messageQueue.shift();
+		if (messageObj) {
+			console.log("processMessage",messageObj);
+			socket.emit("display reporter", {
+				hubnetMessageSource: messageObj.key,
+				hubnetMessageTag: messageObj.tag,
+				hubnetMessage: roomData[messageObj.room].userData[messageObj.key][messageObj.tag],
+				components:""
+			});
+			processMessage(messageQueue);
 		}
+	}
+	
+	socket.on("admin clear room", function(data) {
+		console.log("got admin clear room message");
+		clearRoom(data.roomName);
 	});
 	
 	// user exits 
@@ -219,9 +234,11 @@ io.on('connection', function(socket){
 		var myTurtleId = socket.myTurtleId;
 		var myUserId = socket.id;
 		if (socket.myUserType === "teacher") {
-			clearRoom(myRoom);
-			delete roomData[myRoom];
-			disableTimer();
+			// if it's not a flat model...
+			if (config.interfaceJs.teacherComponents.componentRange != config.interfaceJs.teacherComponents.componentRange) {
+				clearRoom(myRoom);
+				disableTimer();
+			}
 		} else {
 			if (roomData[myRoom] != undefined) {
 				var myTurtleId = roomData[myRoom].turtleDict[myUserId];
@@ -252,8 +269,15 @@ function clearRoom(roomName) {
 	var myRoom = roomName;
 	var clientList = [];
 	if (roomData[myRoom]) {
-		for (var key in roomData[myRoom].userIdDict) {
-			clientList.push(roomData[myRoom].userIdDict[key]);
+		// if teacher and student have different interfaces (hubnet, not gbcc)
+		if (config.interfaceJs.teacherComponents.componentRange === config.interfaceJs.teacherComponents.componentRange) {
+			for (var key in roomData[myRoom].userData) {
+				clientList.push(key);
+			}
+		} else {
+			for (var key in roomData[myRoom].userIdDict) {
+				clientList.push(roomData[myRoom].userIdDict[key]);
+			}			
 		}
 		for (var i=0; i<clientList.length; i++) {
 			if (io.sockets.sockets[clientList[i]]) {
@@ -261,6 +285,7 @@ function clearRoom(roomName) {
 				io.sockets.sockets[clientList[i]].disconnect();
 			}
 		}
+		delete roomData[myRoom];
 	}
 }
 

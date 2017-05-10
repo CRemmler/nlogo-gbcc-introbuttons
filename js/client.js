@@ -9,19 +9,17 @@ jQuery(document).ready(function() {
   var turtleDict = {};
   socket = io();
 
-  // show first screen, ask user to enter room
-  //Interface.showLogin();
-
   // save student settings
   socket.on("save settings", function(data) {
     userId = data.userId; 
     userType = data.userType; 
+    world.hubnetManager.gbccSetupGallery();
   });
   
   // display teacher or student interface
   socket.on("display interface", function(data) {
     switch (data.userType) {
-      case "user":
+      case "teacher":
         Interface.showTeacher(data.room, data.components);
         break;
       case "student":
@@ -41,10 +39,10 @@ jQuery(document).ready(function() {
     Interface.showAdmin(data.roomData);
   });
 
-  // student repaints most recent changes to world
+  // student repaints most recent changes to world (hubnet, not gbcc)
   socket.on("send update", function(data) {
-    //universe.applyUpdate({turtles: data.turtles, patches: data.patches});
-    //universe.repaint();
+    universe.applyUpdate({turtles: data.turtles, patches: data.patches});
+    universe.repaint();
   });  
   
   socket.on("display admin", function(data) {
@@ -53,19 +51,21 @@ jQuery(document).ready(function() {
 
   // students display reporters
   socket.on("display reporter", function(data) {
-    console.log("display reporter " + data.hubnetMessageTag);
     if (data.hubnetMessageTag === "canvas") {
-      if ($("#image-"+data.userId).length === 0) {
+      if ($("#image-"+data.hubnetMessageSource).length === 0) {
+        console.log("display canvas",data.hubnetMessageSource);
         var canvasImg = new Image();
-        canvasImg.id = "image-" + data.userId;
+        canvasImg.id = "image-" + data.hubnetMessageSource;
         canvasImg.src = data.hubnetMessage;
-        canvasImg.style.padding = "10px";
+        canvasImg.onclick = function() {
+          socket.emit("get reporter", {hubnetMessageSource: data.hubnetMessageSource, hubnetMessageTag: "code-example"});
+        };  
         $(".netlogo-gallery").append(canvasImg);
       } else {        
-        $("#image-"+data.userId).attr("src", data.hubnetMessage);
+        $("#image-"+data.hubnetMessageSource).attr("src", data.hubnetMessage);
       }
     } else {
-      $(data.components[data.hubnetMessageTag]).html(data.hubnetMessage);
+      $(data.components[data.hubnetMessageTag]).val(data.hubnetMessage);
     }
   });
   

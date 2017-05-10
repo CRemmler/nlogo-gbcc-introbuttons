@@ -56766,7 +56766,7 @@
             xwa(a) ? "SelfManager.self().goHome" : ywa(a) ? "SelfManager.self().moveTo" : zwa(a) ? "SelfManager.self().penManager.lowerPen" : Awa(a) ? "SelfManager.self().penManager.useEraser" : Bwa(a) ? "SelfManager.self().penManager.raisePen" : Cwa(a) ? "SelfManager.self().rideMe" : Dwa(a) ? "SelfManager.self().right" : Ewa(a) ? "SelfManager.self().setXY" : Fwa(a) ? "SelfManager.self().stamp" : Gwa(a) ? "SelfManager.self().stampErase" : Hwa(a) ? "SelfManager.self().tie" : Iwa(a) ? "SelfManager.self().untie" : Jwa(a) ? "SelfManager.self().watchMe" : Kwa(a) ? "plotManager.disableAutoplotting" :
             Lwa(a) ? "plotManager.enableAutoplotting" : Mwa(a) ? "plotManager.clearAllPlots" : Nwa(a) ? "plotManager.clearPlot" : Owa(a) ? "plotManager.createTemporaryPen" : Pwa(a) ? "plotManager.drawHistogramFrom" : Qwa(a) ? "plotManager.lowerPen" : Rwa(a) ? "plotManager.resetPen" : Swa(a) ? "plotManager.raisePen" : Twa(a) ? "plotManager.plotValue" : Uwa(a) ? "plotManager.plotPoint" : Vwa(a) ? "plotManager.setCurrentPen" : Wwa(a) ? "plotManager.setCurrentPlot" : Xwa(a) ? "plotManager.setHistogramBarCount" : Ywa(a) ? "plotManager.setPenColor" : Zwa(a) ? "plotManager.setPenInterval" :
             $wa(a) ? "plotManager.setPenMode" : axa(a) ? "plotManager.setXRange" : bxa(a) ? "plotManager.setYRange" : cxa(a) ? "plotManager.setupPlots" : dxa(a) ? "plotManager.updatePlots" : exa(a) ? "world.clearAll" : fxa(a) ? "world.clearDrawing" : gxa(a) ? "world.observer.clearCodeGlobals" : hxa(a) ? "world.clearPatches" : ixa(a) ? "world.turtleManager.clearTurtles" : ixb(a) ? "world.hubnetManager.hubnetFetchMessage" : ixc(a) ? "world.hubnetManager.hubnetSend" : jxa(a) ? "world.ticker.clear" : kxa(a) ? "world.linkManager.clear" : lxa(a) ? "world.resize" : mxa(a) ? "world.setPatchSize" : nxa(a) ? "world.ticker.reset" : oxa(a) ? "world.ticker.tick" : pxa(a) ? "world.ticker.tickAdvance" :
-            qxa(a) ? "workspace.timer.reset" : rxa(a) ? "workspace.rng.setSeed" : sxa(a) ? "world.observer.follow" : txa(a) ? "world.observer.ride" : uxa(a) ? "world.observer.watch" : vxa(a) ? "world.observer.resetPerspective" : wxa(a) ? "LayoutManager.layoutSpring" : xxa(a) ? "LayoutManager.layoutCircle" : yxa(a) ? "LayoutManager.layoutRadial" : zxa(a) ? "LayoutManager.layoutTutte" : Axa(a) ? "world.changeTopology" : Bxa(a) ? "Tasks.apply" : Cxa(a) ? "Prims.stdout" : Dxa(a) ? "UserDialogPrims.confirm" : ixd(a) ? "world.hubnetManager.gbccSendCanvas" : ixg(a) ? "world.hubnetManager.gbccSetupCanvas" : ixe(a) ? "world.hubnetManager.gbccRunCode" : Exa(a) ? "ExportPrims.exportOutput" : Fxa(a) ? "notImplemented('display', undefined)" :
+            qxa(a) ? "workspace.timer.reset" : rxa(a) ? "workspace.rng.setSeed" : sxa(a) ? "world.observer.follow" : txa(a) ? "world.observer.ride" : uxa(a) ? "world.observer.watch" : vxa(a) ? "world.observer.resetPerspective" : wxa(a) ? "LayoutManager.layoutSpring" : xxa(a) ? "LayoutManager.layoutCircle" : yxa(a) ? "LayoutManager.layoutRadial" : zxa(a) ? "LayoutManager.layoutTutte" : Axa(a) ? "world.changeTopology" : Bxa(a) ? "Tasks.apply" : Cxa(a) ? "Prims.stdout" : Dxa(a) ? "UserDialogPrims.confirm" : ixd(a) ? "world.hubnetManager.gbccSendCanvas" : ixg(a) ? "world.hubnetManager.gbccSetupGallery" : ixe(a) ? "world.hubnetManager.gbccRunCode" : Exa(a) ? "ExportPrims.exportOutput" : Fxa(a) ? "notImplemented('display', undefined)" :
             c.t(a)
     };
     l.cb = function(a) {
@@ -88813,12 +88813,12 @@
         };
 
         function ixe(a) {
-            return !!(a && a.b && a.b.o.DKD)
+            return !!(a && a.b && a.b.o.DKE)
         }
         l.b = m({
-            DKD: 0
+            DKE: 0
         }, !1, "org.nlogo.core.prim.etc._gbccruncode", {
-            DKD: 1, 
+            DKE: 1, 
             nf: 1,
             e: 1,
             ta: 1,

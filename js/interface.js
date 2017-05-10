@@ -1,7 +1,7 @@
 Interface = (function() {
 
   var items = {};
-
+  
   function displayLoginInterface(rooms, components) {
     var roomButtonHtml, roomButtonId;
     setupItems();
@@ -11,7 +11,15 @@ Interface = (function() {
     $(".admin-body").css("display","inline");
     showItems(components.componentRange[0], components.componentRange[1]);
     $(components.createRoomButton).addClass("create-room-button");
+    $(components.createRoomButton).click(function() {
+      var myRoom = $(".create-room-input").val();
+      socket.emit("enter room", {room: myRoom});
+    });
     $(".netlogo-button:not(.hidden):not(.create-room-button)").addClass("join-room-button");
+    $(".netlogo-button:not(.hidden):not(.create-room-button)").click(function() {
+      var myRoom = $("#"+$(this).attr("id")+" span").html();
+      socket.emit("enter room", {room: myRoom});
+    });
     $(components.createRoomInput).addClass("create-room-input");
     $(".join-room-button").addClass("hidden");
     for (var i=0; i<rooms.length; i++) {
@@ -21,6 +29,17 @@ Interface = (function() {
       $(roomButtonId).html(roomButtonHtml);
       $(roomButtonId).removeClass("hidden");
     }
+    
+    
+    $("#gallery-toggle").click(function() {
+      if ($("#gallery-toggle").parent().hasClass("netlogo-active")) {
+        $(".netlogo-gallery").addClass("hidden");
+      } else {
+        $(".netlogo-gallery").removeClass("hidden");
+      }
+    });
+    $(".netlogo-gallery").addClass("hidden");
+    
   }
 
   function displayTeacherInterface(room, components) {
@@ -53,7 +72,7 @@ Interface = (function() {
   }
   
   function clearRoom(roomName) {
-    socket.emit("clear room", {roomName: roomName});
+    socket.emit("admin clear room", {roomName: roomName});
     //$("#submitRoomString").trigger("click");
   }
   

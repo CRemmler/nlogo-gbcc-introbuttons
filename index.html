@@ -336,8 +336,15 @@ div.CodeMirror-dragcursors {
 
 .netlogo-gallery img {
   // in Gallery tab, a row can have 7 images at 122px, 6 at 146px and 5 at 179px
-  width: 146px;
-  height: 146px;
+  width: 179px;
+  height: 179px;
+  margin: 8px;
+  cursor: pointer;
+  border:5px solid white;
+}
+
+.netlogo-gallery img:hover {
+  border:5px solid #85F397;
 }
 
 /* See issue #2901 */
@@ -47184,13 +47191,11 @@ c=e.buttons;A=0;if(e.enabled!==!1){for(b in c)a.addButton(c[b]);u(a,"destroy",a.
     };
     
     HubnetManager.prototype.gbccRunCode = function(x) {
-      console.log("gbccRunCode");
       //console.log(x.replace(/[\n\r]/g, ' '))
       session.widgetController.ractive.findComponent('console').fire('run',x);
     };
     
     HubnetManager.prototype.gbccSendCanvas = function() {
-      console.log("send canvas");
       var gbccCanvas = document.getElementsByClassName("netlogo-canvas")[0].toDataURL("image/jpeg");
       socket.emit("send reporter", {
         hubnetMessageSource: "all-users", 
@@ -47205,7 +47210,6 @@ c=e.buttons;A=0;if(e.enabled!==!1){for(b in c)a.addButton(c[b]);u(a,"destroy",a.
     };
     
     HubnetManager.prototype.gbccSetupGallery = function() {
-      console.log("setup gallery");
       socket.emit("get reporter", {
         hubnetMessageSource: "all users", 
         hubnetMessageTag: "canvas", 
@@ -47214,7 +47218,7 @@ c=e.buttons;A=0;if(e.enabled!==!1){for(b in c)a.addButton(c[b]);u(a,"destroy",a.
     };
     
     var processCommand = function(m) {
-      console.log(m.messageSource+" "+m.messageTag+" "+m.message);
+      //console.log(m.messageSource+" "+m.messageTag+" "+m.message);
       if (commandQueue.length === 0) {
         world.hubnetManager.setHubnetMessageWaiting(false);
       }
@@ -54132,7 +54136,7 @@ into the sorting code and caused a 25% performance hit in BZ Benchmark. --JAB (4
     components: {
       infoeditor: RactiveInfoTabEditor
     },
-    template: "<div class='netlogo-tab-content netlogo-info'\n     intro='grow:{disable:\"info-toggle\"}' outro='shrink:{disable:\"info-toggle\"}'>\n  <label class='netlogo-toggle-edit-mode'>\n    <input type='checkbox' checked='{{editing}}'>\n    Edit Mode\n  </label>\n  {{# !editing }}\n    <div class='netlogo-info-markdown'>{{{markdown(rawText)}}}</div>\n  {{ else }}\n    <infoeditor rawText='{{rawText}}' />\n  {{ / }}\n</div>"
+    template: "<div class='netlogo-tab-content netlogo-info'\n     intro='grow:{disable:\"info-toggle\"}' outro='shrink:{disable:\"info-toggle\"}'>\n  <label class='netlogo-toggle-edit-mode'>\n    <input type='checkbox' checked='{{editing}}'>\n  Edit Mode\n  </label>\n  {{# !editing }}\n    <div class='netlogo-info-markdown'>{{{markdown(rawText)}}}</div>\n  {{ else }}\n    <infoeditor rawText='{{rawText}}' />\n  {{ / }}\n</div>"
   });
 
 }).call(this);
@@ -54141,38 +54145,22 @@ into the sorting code and caused a 25% performance hit in BZ Benchmark. --JAB (4
 </script>
 
 <script>(function() {
-window.RactiveGalleryTabEditor = Ractive.extend({
-onrender: function() {
-  var galleryTabEditor;
-  galleryTabEditor = CodeMirror(this.find('.netlogo-gallery-editor'), {
-    value: this.get('rawText'),
-    tabsize: 2,
-    mode: 'markdown',
-    theme: 'netlogo-default',
-    editing: this.get('editing'),
-    lineWrapping: true
-  });
-  return galleryTabEditor.on('change', (function(_this) {
-    return function() {
-      _this.set('rawText', galleryTabEditor.getValue());
-      return _this.set('gallery', galleryTabEditor.getValue());
-    };
-  })(this));
-},
-template: "<div class='netlogo-gallery-editor'></div>"
-});
 
-window.RactiveGalleryTabWidget = Ractive.extend({
-components: {
-  galleryeditor: RactiveGalleryTabEditor
-},
-template: "<div class='netlogo-tab-content netlogo-gallery'\n     intro='grow:{disable:\"gallery-toggle\"}' outro='shrink:{disable:\"gallery-toggle\"}'>\n   <div id=\"netlogo-view-1\" class=\"netlogo-widget netlogo-view-container-1\">  </div> \n</div>"
-});
+  window.RactiveGalleryTabWidget = Ractive.extend({
+    components: {
+      
+    },
+    template: "<div class='netlogo-tab-content netlogo-info'\n     intro='grow:{disable:\"gallery-toggle\"}' outro='shrink:{disable:\"gallery-toggle\"}'>\n  <label class='netlogo-toggle-edit-mode'>\n     <div class='netlogo-tab-content netlogo-gallery'>duh</div> \n  </label>\n     <div class='netlogo-info-markdown'> \n</div>"
+  });
 
 }).call(this);
-
-//# sourceMappingURL=gallery.js.map
+//# sourceMappingURL=info.js.map
 </script>
+
+
+
+
+
 
     <script>(function() {
   window.RactivePlot = RactiveWidget.extend({
@@ -59214,7 +59202,7 @@ template: "<div class='netlogo-tab-content netlogo-gallery'\n     intro='grow:{d
     })();
   };
 
-  template = "<div class=\"netlogo-model\" style=\"min-width: {{width}}px;\"\n     tabindex=\"1\" on-keydown=\"checkActionKeys\" on-focus=\"checkFocus\" on-blur=\"checkFocus\">\n  <div class=\"netlogo-header\">\n    <div class=\"netlogo-subheader\">\n      <div class=\"netlogo-powered-by\">\n        <a href=\"http://ccl.northwestern.edu/netlogo/\">\n          <img style=\"vertical-align: middle;\" alt=\"NetLogo\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAANcSURBVHjarJRdaFxFFMd/M/dj7252uxubKms+bGprVyIVbNMWWqkQqtLUSpQWfSiV+oVFTcE3DeiDgvoiUSiCYLH2oVoLtQ+iaaIWWtE2FKGkkSrkq5svN+sm7ma/7p3x4W42lEbjQw8MM8yc87/nzPnNFVprbqWJXyMyXuMqx1Ni6N3ny3cX8tOHNLoBUMvESoFI2Xbs4zeO1lzREpSrMSNS1zkBDv6uo1/noz1H7mpvS4SjprAl2AZYEqzKbEowBAgBAkjPKX2599JjT7R0bj412D0JYNplPSBD1G2SmR/e6u1ikEHG2vYiGxoJmxAyIGSCI8GpCItKimtvl2JtfGujDNkX6epuAhCjNeAZxM1ocPy2Qh4toGQ5DLU+ysiuA2S3P0KgJkjAgEAlQylAA64CG/jlUk6//ng4cNWmLK0yOPNMnG99Rs9LQINVKrD+wmke7upg55PrWP3eYcwrlykpKCkoelDy/HVegQhoABNAepbACwjOt72gZkJhypX70YDWEEklue+rbnYc2MiGp1upPfYReiJJUUG58gFXu4udch1wHcjFIgy0HyIjb2yvBpT2F6t+6+f+D15lW8c9JDo7iPSdgVIRLUqL2AyHDQAOf9hfbqxvMF98eT3RuTS1avHyl+Stcphe2chP9+4k/t3RbXVl3W+Ws17FY56/w3VcbO/koS/eZLoAqrQMxADZMTYOfwpwoWjL4+bCYcgssMqGOzPD6CIkZ/3SxTJ0ayFIN6/BnBrZb2XdE1JUgkJWkfrUNRJnPyc16zsbgPyXIUJBpvc+y89nk/S8/4nek3NPGeBWMwzGvhUPnP6RubRLwfODlqqx3LSCyee2MnlwMwA2RwgO5qouVcHmksUdJweYyi8hZkrUjgT5t/ejNq0jBsSqNWsKyT9uFtxw7Bs585d3g46KOeT2bWHmtd14KyP+5mzqpsYU3OyioACMhGiqPTMocsrHId9cy9BLDzKxq8X3ctMwlV6yKSHL4fr4dd0DeQBTBUgUkvpE1kVPbqkX117ZzuSaFf4zyfz5n9A4lk0yNU7vyb7jTy1kmFGipejKvh6h9n0W995ZPTu227hqmCz33xXgFV1v9NzI96NfjndWt7XWCB/7BSICFWL+j3lAofpCtfYFb6X9MwCJZ07mUsXRGwAAAABJRU5ErkJggg==\"/>\n          <span style=\"font-size: 16px;\">powered by NetLogo</span>\n        </a>\n      </div>\n    </div>\n    <editableTitle title=\"{{modelTitle}}\" isEditing=\"{{isEditing}}\"/>\n    {{# !readOnly }}\n    <div class=\"netlogo-export-wrapper\">\n      <span style=\"margin-right: 4px;\">Export:</span>\n      <button class=\"netlogo-ugly-button\" on-click=\"exportnlogo\">NetLogo</button>\n      <button class=\"netlogo-ugly-button\" on-click=\"exportHtml\">HTML</button>\n    </div>\n    {{/}}\n  </div>\n\n  <div id=\"netlogo-widget-context-menu\" class=\"widget-context-menu\">\n    <div id='widget-creation-disabled-message' style=\"display: none;\">\n      Widget creation is not yet available.  Check back soon.\n    </div>\n  </div>\n\n  <div class=\"netlogo-interface-unlocker\" style=\"display: none\" on-click=\"toggleInterfaceLock\"></div>\n\n  <label class=\"netlogo-widget netlogo-speed-slider\">\n    <span class=\"netlogo-label\">model speed</span>\n    <input type=\"range\" min=-1 max=1 step=0.01 value={{speed}} />\n    <tickCounter isVisible=\"{{primaryView.showTickCounter}}\"\n                 label=\"{{primaryView.tickCounterLabel}}\" value=\"{{ticks}}\" />\n  </label>\n\n  <div style=\"position: relative; width: {{width}}px; height: {{height}}px\"\n       class=\"netlogo-widget-container\"\n       on-contextmenu=\"showContextMenu:{{'widget-creation-disabled-message'}}\">\n    {{#widgetObj:key}}\n      {{# type === 'view'     }} <viewWidget    id=\"{{>widgetID}}\" dims=\"position: absolute; left: {{left}}; top: {{top}};\" widget={{this}} ticks=\"{{ticks}}\" /> {{/}}\n      {{# type === 'textBox'  }} <labelWidget   id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'switch'   }} <switchWidget  id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'button'   }} <buttonWidget  id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} errorClass=\"{{>errorClass}}\" ticksStarted=\"{{ticksStarted}}\"/> {{/}}\n      {{# type === 'slider'   }} <sliderWidget  id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} errorClass=\"{{>errorClass}}\" /> {{/}}\n      {{# type === 'chooser'  }} <chooserWidget id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'monitor'  }} <monitorWidget id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} errorClass=\"{{>errorClass}}\" /> {{/}}\n      {{# type === 'inputBox' }} <inputWidget   id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'plot'     }} <plotWidget    id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'output'   }} <outputWidget  id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} text=\"{{outputWidgetOutput}}\" /> {{/}}\n    {{/}}\n  </div>\n\n  <div class=\"netlogo-tab-area\" style=\"max-width: {{Math.max(width, 500)}}px\">\n    {{# !readOnly }}\n    <label class=\"netlogo-tab{{#showConsole}} netlogo-active{{/}}\">\n      <input id=\"console-toggle\" type=\"checkbox\" checked=\"{{showConsole}}\" />\n      <span class=\"netlogo-tab-text\">Command Center</span>\n    </label>\n    {{#showConsole}}\n      <console output=\"{{consoleOutput}}\"/>\n    {{/}}\n    {{/}}\n    <label class=\"netlogo-tab{{#showCode}} netlogo-active{{/}}\">\n      <input id=\"code-tab-toggle\" type=\"checkbox\" checked=\"{{ showCode }}\" />\n      <span class=\"netlogo-tab-text\">NetLogo Code</span>\n    </label>\n    {{#showCode}}\n      <editor code='{{code}}' lastCompiledCode='{{lastCompiledCode}}' readOnly='{{readOnly}}' />\n    {{/}}\n    <label class=\"netlogo-tab{{#showGallery}} netlogo-active{{/}}\">\n      <input id=\"gallery-toggle\" type=\"checkbox\" checked=\"{{ showGallery }}\" />\n      <span class=\"netlogo-tab-text\">Gallery</span>\n    </label>\n    {{#showGallery}}\n       <gallerytab rawText='{{info}}' editing='false' /> \n    {{/}}\n  <label class=\"netlogo-tab{{#showInfo}} netlogo-active{{/}}\">\n      <input id=\"info-toggle\" type=\"checkbox\" checked=\"{{ showInfo }}\" />\n      <span class=\"netlogo-tab-text\">Model Info</span>\n    </label>\n    {{#showInfo}}\n      <infotab rawText='{{info}}' editing='false' /> \n    {{/}}\n  </div>\n</div>";
+  template = "<div class=\"netlogo-model\" style=\"min-width: {{width}}px;\"\n     tabindex=\"1\" on-keydown=\"checkActionKeys\" on-focus=\"checkFocus\" on-blur=\"checkFocus\">\n  <div class=\"netlogo-header\">\n    <div class=\"netlogo-subheader\">\n      <div class=\"netlogo-powered-by\">\n        <a href=\"http://ccl.northwestern.edu/netlogo/\">\n          <img style=\"vertical-align: middle;\" alt=\"NetLogo\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAANcSURBVHjarJRdaFxFFMd/M/dj7252uxubKms+bGprVyIVbNMWWqkQqtLUSpQWfSiV+oVFTcE3DeiDgvoiUSiCYLH2oVoLtQ+iaaIWWtE2FKGkkSrkq5svN+sm7ma/7p3x4W42lEbjQw8MM8yc87/nzPnNFVprbqWJXyMyXuMqx1Ni6N3ny3cX8tOHNLoBUMvESoFI2Xbs4zeO1lzREpSrMSNS1zkBDv6uo1/noz1H7mpvS4SjprAl2AZYEqzKbEowBAgBAkjPKX2599JjT7R0bj412D0JYNplPSBD1G2SmR/e6u1ikEHG2vYiGxoJmxAyIGSCI8GpCItKimtvl2JtfGujDNkX6epuAhCjNeAZxM1ocPy2Qh4toGQ5DLU+ysiuA2S3P0KgJkjAgEAlQylAA64CG/jlUk6//ng4cNWmLK0yOPNMnG99Rs9LQINVKrD+wmke7upg55PrWP3eYcwrlykpKCkoelDy/HVegQhoABNAepbACwjOt72gZkJhypX70YDWEEklue+rbnYc2MiGp1upPfYReiJJUUG58gFXu4udch1wHcjFIgy0HyIjb2yvBpT2F6t+6+f+D15lW8c9JDo7iPSdgVIRLUqL2AyHDQAOf9hfbqxvMF98eT3RuTS1avHyl+Stcphe2chP9+4k/t3RbXVl3W+Ws17FY56/w3VcbO/koS/eZLoAqrQMxADZMTYOfwpwoWjL4+bCYcgssMqGOzPD6CIkZ/3SxTJ0ayFIN6/BnBrZb2XdE1JUgkJWkfrUNRJnPyc16zsbgPyXIUJBpvc+y89nk/S8/4nek3NPGeBWMwzGvhUPnP6RubRLwfODlqqx3LSCyee2MnlwMwA2RwgO5qouVcHmksUdJweYyi8hZkrUjgT5t/ejNq0jBsSqNWsKyT9uFtxw7Bs585d3g46KOeT2bWHmtd14KyP+5mzqpsYU3OyioACMhGiqPTMocsrHId9cy9BLDzKxq8X3ctMwlV6yKSHL4fr4dd0DeQBTBUgUkvpE1kVPbqkX117ZzuSaFf4zyfz5n9A4lk0yNU7vyb7jTy1kmFGipejKvh6h9n0W995ZPTu227hqmCz33xXgFV1v9NzI96NfjndWt7XWCB/7BSICFWL+j3lAofpCtfYFb6X9MwCJZ07mUsXRGwAAAABJRU5ErkJggg==\"/>\n          <span style=\"font-size: 16px;\">powered by NetLogo</span>\n        </a>\n      </div>\n    </div>\n    <editableTitle title=\"{{modelTitle}}\" isEditing=\"{{isEditing}}\"/>\n    {{# !readOnly }}\n    <div class=\"netlogo-export-wrapper\">\n      <span style=\"margin-right: 4px;\">Export:</span>\n      <button class=\"netlogo-ugly-button\" on-click=\"exportnlogo\">NetLogo</button>\n      <button class=\"netlogo-ugly-button\" on-click=\"exportHtml\">HTML</button>\n    </div>\n    {{/}}\n  </div>\n\n  <div id=\"netlogo-widget-context-menu\" class=\"widget-context-menu\">\n    <div id='widget-creation-disabled-message' style=\"display: none;\">\n      Widget creation is not yet available.  Check back soon.\n    </div>\n  </div>\n\n  <div class=\"netlogo-interface-unlocker\" style=\"display: none\" on-click=\"toggleInterfaceLock\"></div>\n\n  <label class=\"netlogo-widget netlogo-speed-slider\">\n    <span class=\"netlogo-label\">model speed</span>\n    <input type=\"range\" min=-1 max=1 step=0.01 value={{speed}} />\n    <tickCounter isVisible=\"{{primaryView.showTickCounter}}\"\n                 label=\"{{primaryView.tickCounterLabel}}\" value=\"{{ticks}}\" />\n  </label>\n\n  <div style=\"position: relative; width: {{width}}px; height: {{height}}px\"\n       class=\"netlogo-widget-container\"\n       on-contextmenu=\"showContextMenu:{{'widget-creation-disabled-message'}}\">\n    {{#widgetObj:key}}\n      {{# type === 'view'     }} <viewWidget    id=\"{{>widgetID}}\" dims=\"position: absolute; left: {{left}}; top: {{top}};\" widget={{this}} ticks=\"{{ticks}}\" /> {{/}}\n      {{# type === 'textBox'  }} <labelWidget   id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'switch'   }} <switchWidget  id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'button'   }} <buttonWidget  id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} errorClass=\"{{>errorClass}}\" ticksStarted=\"{{ticksStarted}}\"/> {{/}}\n      {{# type === 'slider'   }} <sliderWidget  id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} errorClass=\"{{>errorClass}}\" /> {{/}}\n      {{# type === 'chooser'  }} <chooserWidget id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'monitor'  }} <monitorWidget id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} errorClass=\"{{>errorClass}}\" /> {{/}}\n      {{# type === 'inputBox' }} <inputWidget   id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'plot'     }} <plotWidget    id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} /> {{/}}\n      {{# type === 'output'   }} <outputWidget  id=\"{{>widgetID}}\" dims=\"{{>dimensions}}\" widget={{this}} text=\"{{outputWidgetOutput}}\" /> {{/}}\n    {{/}}\n  </div>\n\n  <div class=\"netlogo-tab-area\" style=\"max-width: {{Math.max(width, 500)}}px\">\n    {{# !readOnly }}\n    <label class=\"netlogo-tab{{#showConsole}} netlogo-active{{/}}\">\n      <input id=\"console-toggle\" type=\"checkbox\" checked=\"{{showConsole}}\" />\n      <span class=\"netlogo-tab-text\">Command Center</span>\n    </label>\n    {{#showConsole}}\n      <console output=\"{{consoleOutput}}\"/>\n    {{/}}\n    {{/}}\n    <label class=\"netlogo-tab{{#showCode}} netlogo-active{{/}}\">\n      <input id=\"code-tab-toggle\" type=\"checkbox\" checked=\"{{ showCode }}\" />\n      <span class=\"netlogo-tab-text\">NetLogo Code</span>\n    </label>\n    {{#showCode}}\n      <editor code='{{code}}' lastCompiledCode='{{lastCompiledCode}}' readOnly='{{readOnly}}' />\n    {{/}}\n             <label class=\"netlogo-tab{{#showGallery}} netlogo-active{{/}}\">\n      <input id=\"gallery-toggle\" type=\"checkbox\" checked=\"{{ showGallery }}\" />\n      <span class=\"netlogo-tab-text\">Gallery</span>\n    </label>\n            <div class=\"netlogo-gallery netlogo-tab-content\"></div>     \n          <label class=\"netlogo-tab{{#showInfo}} netlogo-active{{/}}\">\n      <input id=\"info-toggle\" type=\"checkbox\" checked=\"{{ showInfo }}\" />\n      <span class=\"netlogo-tab-text\">Model Info</span>\n    </label>\n    {{#showInfo}}\n      <infotab rawText='{{info}}' editing='false' /> \n    {{/}}\n  </div>\n</div>";
 
   partials = {
     errorClass: "{{# !compilation.success}}netlogo-widget-error{{/}}",
@@ -60116,29 +60104,12 @@ end
 ;; HubNet Procedures ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-;; determines which client sent a command, and what the command was
-to listen-clients
- if hubnet-message-waiting? [
-   hubnet-fetch-message
-   ifelse hubnet-enter-message?
-   [ gbcc-setup-gallery ]
-   [ 
-     ifelse hubnet-exit-message?
-     [ ]
-     [ execute-command hubnet-message-tag ]
-   ]
- ]
-end
-
-to execute-command [command]
-end
-
 to run-code
   gbcc-run-code code-example
 end
 
 to share-code
-  hubnet-send "server" "code" code-example
+  hubnet-send "server" "code-example" code-example
   gbcc-send-canvas
 end
 
@@ -60695,34 +60666,19 @@ INPUTBOX
 1035
 538
 code-example
-show \"cats\"\nshow \"dogs\"
+ca
 1
 1
 String
 
-BUTTON
-807
-545
-917
-578
-run-code
-run-code
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
+
 
 BUTTON
-923
+806
 545
 1035
 578
-share-code
+share image & code-example
 share-code
 NIL
 1
@@ -60733,38 +60689,6 @@ NIL
 NIL
 NIL
 1
-
-BUTTON
-962
-326
-1035
-359
-listen
-listen-clients
-T
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-TEXTBOX
-807
-329
-965
-371
-Listen to receive snapshots,\nand display in the gallery.
-11
-105.0
-1
-
-
-
-
-
 
 INPUTBOX
 39
@@ -60917,7 +60841,6 @@ welcome-teacher
 17
 1
 11
-
 
 
 
