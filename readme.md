@@ -1,31 +1,19 @@
 ## Features:
 - [x] Login to any room.
-- [x] First to enter gets room get teacher interface.
-- [x] Teacher display shows student's turtles.
-- [x] When students move arrow keys, their turtle moves around.
-- [x] Students see reporters such as position, shape, color and state of infection.
+- [x] All users get the same Intro-Buttons interface.
+- [x] When users "Share Image and Code", their shared canvases appear on everyone's gallery.
 - [x] When a teacher logs out, students leave room and return to login state.
 - [x] When a student logs out, the teacher removes student's turtle
-- [x] Students see reporters such as position, shape, color and state of infection. 
-- [x] Get multiple plots to work.
-- [x] Make plot pointer show correct position.
 - [x] Admin capabilities.
 
 ## Use NetLogo primitive commands and reporters
-- [x] hubnet-fetch-message 
 - [x] hubnet-send
-- [x] hubnet-message-waiting?
-- [x] hubnet-exit-message?
-- [x] hubnet-enter-message?
-- [x] hubnet-message
-- [x] hubnet-message-source
-- [x] hubnet-message-tag
+- [x] gbcc-send-canvas
 
-## Add variable to turtle prototype
-- [x] userid
-
-## Known Issues
-- When you turn the "Go" button off, messages from the client accumulate.
+## Server Code
+- [x] send-reporter shares a variable from a user, with server or all users
+- [x] get-reporter asks server for a variable from a user 
+- [x] variables include the canvas, global variables and variables local to patches or turtles
 
 ## Convert a NetLogo Hubnet Activity to Web
 - Open NetLogo Hubnet Activity in the NetLogo java app. Save as NetLogo Web.

@@ -14,7 +14,6 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-	
 	var rooms = [];
 	for (var key in roomData) { rooms.push(key); }
 	socket.emit("display interface", {userType: "login", rooms: rooms, components: config.interfaceJs.loginComponents});
@@ -162,7 +161,7 @@ io.on('connection', function(socket){
 			roomData[myRoom].userData[myUserId][data.hubnetMessageTag] = data.hubnetMessage;
 		} else {
 			var dataObject = {
-				hubnetMessageSource: destination,
+				hubnetMessageSource: myUserId,
 				hubnetMessageTag: data.hubnetMessageTag,
 				hubnetMessage: data.hubnetMessage,
 				components: config.clientJs.reporterComponents,
@@ -211,7 +210,7 @@ io.on('connection', function(socket){
 	function processMessage(messageQueue) {
 		var messageObj = messageQueue.shift();
 		if (messageObj) {
-			console.log("processMessage",messageObj);
+			// console.log("processMessage",messageObj);
 			socket.emit("display reporter", {
 				hubnetMessageSource: messageObj.key,
 				hubnetMessageTag: messageObj.tag,
