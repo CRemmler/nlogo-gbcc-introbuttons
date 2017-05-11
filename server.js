@@ -222,7 +222,6 @@ io.on('connection', function(socket){
 	}
 	
 	socket.on("admin clear room", function(data) {
-		console.log("got admin clear room message");
 		clearRoom(data.roomName);
 	});
 	
@@ -237,6 +236,11 @@ io.on('connection', function(socket){
 			if (config.interfaceJs.teacherComponents.componentRange != config.interfaceJs.teacherComponents.componentRange) {
 				clearRoom(myRoom);
 				disableTimer();
+			} else {
+				delete roomData[myRoom].userData[myUserId];
+				if (Object.keys(roomData[myRoom].userData).length === 0) { 
+					delete roomData[myRoom]; 
+				}				
 			}
 		} else {
 			if (roomData[myRoom] != undefined) {
@@ -250,9 +254,14 @@ io.on('connection', function(socket){
 					hubnetMessageTag: "hubnet-exit-message", 
 					hubnetMessage: ""
 				});
+				delete roomData[myRoom].userData[myUserId];
 				delete roomData[myRoom].turtles[myTurtleId];
-				if (roomData[myRoom].turtles === {}) {
-					delete roomData[myRoom];
+				if (config.interfaceJs.teacherComponents.componentRange != config.interfaceJs.teacherComponents.componentRange) {
+					if (roomData[myRoom].turtles === {}) { delete roomData[myRoom]; }
+				} else {
+					if (Object.keys(roomData[myRoom].userData).length === 0) { 
+						delete roomData[myRoom]; 
+					}				
 				}
 				if (Object.keys(roomData).length === 0) { disableTimer();}
 			}
