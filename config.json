@@ -18,7 +18,7 @@
   },
   "clientJs": {
     "reporterComponents": {      
-      "code-example": "#netlogo-inputBox-36 textarea"
+      "code-example": "#netlogo-inputBox-35 textarea"
     }
   }
 }
