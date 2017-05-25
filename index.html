@@ -47192,6 +47192,9 @@ c=e.buttons;A=0;if(e.enabled!==!1){for(b in c)a.addButton(c[b]);u(a,"destroy",a.
     
     HubnetManager.prototype.gbccRunCode = function(x) {
       //console.log(x.replace(/[\n\r]/g, ' '))
+      if ($(".netlogo-tab-content.netlogo-command-center").length === 0) {
+        $("#console-toggle").click();
+      }
       session.widgetController.ractive.findComponent('console').fire('run',x);
     };
     
@@ -60671,14 +60674,29 @@ ca
 1
 String
 
-
-
 BUTTON
 806
 545
+900
+578
+run
+gbcc-run-code code-example
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+910
+545
 1035
 578
-share image & code-example
+share
 share-code
 NIL
 1
